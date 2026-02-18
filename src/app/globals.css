@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([d ata-theme=dark], [data-theme=dark] *));
+@custom-variant child (& > *);
+@custom-variant child-hover (& > *:hover);
+
+body {
+  font-family: var(--font-IranSans);
+}
+
+@layer components {
+  .bg-theme {
+    @apply bg-white dark:bg-gray-900;
+  }
+  .border-theme {
+    @apply border-gray-300 dark:border-gray-600 border;
+  }
+  .text-theme {
+    @apply text-black dark:text-white;
+  }
+  .text-l-theme {
+    @apply text-gray-400 dark:text-gray-400;
+  }
+  .text-size {
+    @apply text-sm md:text-base lg:text-lg;
+  }
+  .animation-theme {
+    @apply transition-all  transform duration-300;
+  }
+  .icon-theme {
+    @apply text-xl cursor-pointer text-[#78b5d8] transform duration-500 transition-all hover:scale-105;
+  }
+}

@@ -18,8 +18,20 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/providers": ["./src/providers/providers.tsx"],
+      "@/constants": ["./src/constants/constant.ts"],
+      "@/functions": ["./src/functions/function.ts"],
+      "@/types": ["./src/types/types.type"],
+      // "@/constants": ["./src"],
+      "@/templates/*": ["./src/components/templates/*"],
+      "@/pages/*": ["./src/components/pages/*"],
+      "@/layout/*": ["./src/components/layout/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/images/*": ["./public/images/*"],
+      "@/svg/*": ["./public/svg/*"]
+      // "@/redux/*": ["./src/redux/*"]
     }
   },
   "include": [

@@ -48,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className="h-full " suppressHydrationWarning>
       <body
-        className={`${IranSans.variable}  antialiased bg-white   dark:!bg-gray-900  h-full transition-colors duration-300 `}
+        className={`${IranSans.variable}  antialiased bg-white   dark:bg-gray-900  h-full transition-colors duration-300 `}
       >
         <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
       </body>

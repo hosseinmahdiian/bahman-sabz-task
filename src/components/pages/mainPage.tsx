@@ -30,7 +30,7 @@ const MainPage = () => {
           <Link
             key={task.href}
             href={task.href}
-            className="!border border-theme !px-4 !py-2 rounded-xl bg-gray-400  text-theme "
+            className="border border-theme px-4 py-2 rounded-xl bg-gray-400  text-theme "
           >
             {task.label}
           </Link>

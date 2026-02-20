@@ -1,11 +1,11 @@
 "use client";
 
+import { Box } from "@chakra-ui/react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import { CiDark, CiLight } from "react-icons/ci";
+import { FC, useEffect, useState } from "react";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 
-const ThemeToggle: React.FC = () => {
+const ThemeToggle: FC = () => {
   const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState<boolean>(false);
 
@@ -20,21 +20,18 @@ const ThemeToggle: React.FC = () => {
       ? (systemTheme as "light" | "dark")
       : (theme as "light" | "dark");
 
+
   return (
-    <button
+    <Box
+      as="button"
       onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
-      className="
-    group relative  rounded-xl 
-    w-10 h-10 flex items-center justify-center
-    text-[#78b5d8] duration-300 cursor-pointer
-    hover:text-3xl
-  "
       aria-label="Toggle theme"
+      className="group relative rounded-xl w-10 h-10 flex items-center justify-center "
     >
-      <div className="text-2xl group-hover:text-3xl duration-300">
+      <Box className=" scale-130 transition-transform duration-300 group-hover:scale-160 flex text-[#78b5d8] cursor-pointer ">
         {currentTheme === "dark" ? <MdLightMode /> : <MdDarkMode />}
-      </div>
-    </button>
+      </Box>
+    </Box>
   );
 };
 

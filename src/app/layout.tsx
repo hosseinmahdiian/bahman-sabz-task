@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Layout from "src/components/layouts/layout";
-import { Provider } from "src/components/ui/provider";
-import { Button, HStack } from "@chakra-ui/react";
+
+import QueryClientProviderWrapper from "src/providers/queryClientProvider";
+import { ThemeProvider } from "next-themes";
 
 const IranSans = localFont({
   src: [
@@ -48,13 +48,9 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl" className="h-full " suppressHydrationWarning>
       <body
-        className={`${IranSans.variable}  antialiased !bg-white   dark:!bg-gray-900  h-full transition-colors duration-300 `}
+        className={`${IranSans.variable}  antialiased bg-white   dark:!bg-gray-900  h-full transition-colors duration-300 `}
       >
-        <Provider>
-          <Layout>
-            {children}
-            </Layout>
-        </Provider>
+        <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
       </body>
     </html>
   );

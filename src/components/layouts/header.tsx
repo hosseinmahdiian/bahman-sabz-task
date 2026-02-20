@@ -1,51 +1,20 @@
 import Image from "next/image";
-import Logo from "@/images/logo.jpg";
-import Link from "next/link";
-import ThemeToggle from "@/templates/themeToggle";
-import { Box, Container, Text } from "@chakra-ui/react";
 import logo from "@/images/Logo-bahmansabz.png";
+import ThemeToggle from "@/templates/themeToggle";
 
 const Header = () => {
   return (
-    <Box
-      h="80px"
-      bgColor={{ base: "white", _dark: "blue.950" }}
-      borderBottomWidth="1px"
-      position="fixed"
-      top="0"
-      left="0"
-      right="0"
-      w="100%"
-      display="flex"
-      alignItems="center"
-      bg="theme"
-      color="theme"
-      zIndex="30"
-    >
-      <Container
-        maxW="8xl"
-        px="2"
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent="space-between"
-      >
-        <Box
-          display={"flex"}
-          alignItems={"center"}
-          // justifyContent="space-between"
-          gap={"5"}
-        >
+    <header className="h-20 border-b border-theme fixed inset-x-0 w-full top-0 flex items-center border-theme   bg-theme z-30 text-theme ">
+      <div className="flex items-center mx-auto w-full  2xl:px-10 px-5  justify-between 2xl:container ">
+        <div className="flex items-center gap3 ">
           <Image alt="logo" src={logo} width={60} height={60} />
-          <Text>موسسه بهمن سبز</Text>
-        </Box>
-
-        <Box display={"flex"} alignItems={"center"}>
+          <p>موسسه بهمن سبز</p>
+        </div>
+        <div className=" ">
           <ThemeToggle />
-          <ThemeToggle />
-        </Box>
-        
-      </Container>
-    </Box>
+        </div>
+      </div>
+    </header>
   );
 };
 

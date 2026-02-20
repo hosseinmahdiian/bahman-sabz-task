@@ -23,8 +23,8 @@ export const LoginUserAPI = async (data: {
       const cookieStore = await cookies();
       cookieStore.set("user", encrypted, {
         maxAge: 30 * 60,
-        httpOnly: true,
-        secure: true,
+        httpOnly: false,
+        secure: false,
         path: "/",
       });
 

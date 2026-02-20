@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 
 export const sp = (number: number | string) => {
   const Number = number?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -13,4 +14,13 @@ export const convertPersianToEnglish = (str: string) => {
     str = str.replace(persian[i], english[i]);
   }
   return str;
+};
+
+
+export const handleChange = <T extends object>(
+  e: React.ChangeEvent<HTMLInputElement>,
+  set: Dispatch<SetStateAction<T>>,
+) => {
+  const { name, value } = e.target;
+  set((prev) => ({ ...prev, [name]: value.trim() }));
 };

@@ -2,20 +2,18 @@ import React from "react";
 import Footer from "./footer";
 import Header from "./header";
 import { childrenType } from "@/types";
-import { Box, Container } from "@chakra-ui/react";
+import { ThemeProvider } from "next-themes";
 
-const Layout = ({ children }: childrenType) => {
+const LayoutMain = ({ children }: childrenType) => {
   return (
-    <Box bgColor={{ base: "white", _dark: "blue.950" }}>
-      <Container xl={{ display: "block" }} display="none ">
-        <Box w="100%" height="100%" pt="20">
-          <Header />
-          <Box minH="calc(100vh - 160px)">{children}</Box>
-          <Footer />
-        </Box>
-      </Container>
-    </Box>
+    <ThemeProvider attribute="data-theme">
+      <div className="2xl:container mx-auto w-full h-full dark:bg-amber-500">
+        <Header />
+        <div className="h-[calc(100%-160px)] mt-20"> {children}</div>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 };
 
-export default Layout;
+export default LayoutMain;

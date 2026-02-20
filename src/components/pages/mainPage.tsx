@@ -1,4 +1,4 @@
-import ThemeToggle from "@/templates/themeToggle";
+import ThemeToggle from "@/templates/themeToggleChakar";
 import {
   Avatar,
   AvatarGroup,
@@ -10,6 +10,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import LayoutMain from "../layouts/layout";
 
 const tasks = [
   { href: "/task1", label: "task1" },
@@ -19,21 +20,12 @@ const tasks = [
 
 const MainPage = () => {
   return (
-    <Box>
-      <Text textAlign="center" mt="5" fontSize="xl">
+    <LayoutMain>
+      <p className="text-center text-xl mt-4 text-theme ">
         تسک تستی برای موسسه فرهنگی بهمن سبز
-      </Text>
+      </p>
 
-      <Box
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-        mx="auto"
-        gap="2"
-        border="1px"
-        p="4"
-        borderRadius="xl"
-      >
+      <div className=" flex items-center justify-center mx-auto gap-2 border p4 rounded-xl">
         {tasks.map((task) => (
           <Link
             key={task.href}
@@ -43,8 +35,8 @@ const MainPage = () => {
             {task.label}
           </Link>
         ))}
-      </Box>
-    </Box>
+      </div>
+    </LayoutMain>
   );
 };
 

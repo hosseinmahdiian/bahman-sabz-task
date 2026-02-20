@@ -1,6 +1,6 @@
 import { instanceDummyJson } from "./baseDummyJson.api";
 
-export const GetSingleProductAPI = async (id: { id: number }) => {
+export const GetSingleProductAPI = async (id: string ) => {
   try {
     const response = await instanceDummyJson.get(`/products/${id}`);
     const Product = response.data;

@@ -1,22 +1,35 @@
 "use server";
-import { cookies } from "next/headers";
 import { instanceDummyJson } from "./baseDummyJson.api";
-import { decrypt } from "src/cryptoJs";
+import { decrypt, encrypt } from "src/cryptoJs";
+import { useGetAccessToken } from "@/hooks/useGetAccessToken";
+import { cookies } from "next/headers";
+import { maxAgeAccessToken } from "@/constants";
 
 export const GetUserAPI = async () => {
   try {
-    const cookie = await cookies();
-    const oldData = cookie.get("user");
-    if (!oldData) throw new Error("کوکی یافت نشد");
+    const accessToken = await useGetAccessToken();
 
-    const user = decrypt(oldData?.value);
+    if (!accessToken) throw new Error("کوکی یافت نشد");
 
     instanceDummyJson.defaults.headers.common["Authorization"] =
-      `Bearer ${user?.accessToken}`;
+      `Bearer ${accessToken}`;
 
     const response = await instanceDummyJson.get("/auth/me");
 
-    return response.data;
+    if (response.data) {
+      const user = encrypt(response.data);
+      console.log(response.data);
+
+      const cookieStore = await cookies();
+      cookieStore.set("user", user, {
+        maxAge: maxAgeAccessToken,
+        httpOnly: true,
+        // secure: true,
+        path: "/",
+      });
+
+      return response.data;
+    }
   } catch (error) {
     console.error("دریافت اطلاعات ناموفق", error);
     throw error;

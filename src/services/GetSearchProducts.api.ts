@@ -16,8 +16,7 @@ export const GetSearchProductsAPI = async ({
     const response = await instanceDummyJson.get(
       `/products/search?${params.toString()}`,
     );
-    const Products = response.data;
-    return Products;
+    return response.data;
   } catch (error) {
     console.error("دریافت محصولات ناموفق", error);
     throw error;

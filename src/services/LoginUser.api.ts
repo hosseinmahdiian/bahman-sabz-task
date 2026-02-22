@@ -2,6 +2,8 @@
 import { cookies } from "next/headers";
 import { instanceDummyJson } from "./baseDummyJson.api";
 import { encrypt } from "src/cryptoJs";
+import { maxAgeAccessToken, maxAgeRefreshToken } from "@/constants";
+import { GetUserAPI } from "./GetUser.api";
 
 export const LoginUserAPI = async (data: {
   username: string;
@@ -16,17 +18,29 @@ export const LoginUserAPI = async (data: {
       expiresInMins: 30,
     });
     const userData = response.data;
+    console.log(userData);
 
     if (userData) {
-      const encrypted = encrypt(userData);
+      const accessToken = encrypt(userData.accessToken);
+      const refreshToken = encrypt(userData.refreshToken);
 
       const cookieStore = await cookies();
-      cookieStore.set("user", encrypted, {
-        maxAge: 30 * 60,
-        httpOnly: false,
-        secure: false,
+
+      cookieStore.set("accessToken", accessToken, {
+        maxAge: maxAgeAccessToken,
+        httpOnly: true,
+        // secure: true,
         path: "/",
       });
+
+      cookieStore.set("refreshToken", refreshToken, {
+        maxAge: maxAgeRefreshToken,
+        httpOnly: true,
+        // secure: true,
+        path: "/",
+      });
+
+      await GetUserAPI();
 
       return userData;
     }

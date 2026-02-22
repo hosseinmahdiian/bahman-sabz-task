@@ -1,12 +1,13 @@
 import { instanceDummyJson } from "./baseDummyJson.api";
-import { userInfo } from "src/functions/userInfo";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
 export const GetPostsByUserAPI = async () => {
-  const cookieStore = await userInfo();
+  const cookieStore = await useUserInfo();
   try {
-    const response = await instanceDummyJson.get(`users/${cookieStore?.id}/posts`);
-    const Product = response.data;
-    return Product;
+    const response = await instanceDummyJson.get(
+      `users/${cookieStore?.id}/posts`,
+    );
+    return response.data;
   } catch (error) {
     console.error("دریافت Todo ناموفق", error);
     throw error;

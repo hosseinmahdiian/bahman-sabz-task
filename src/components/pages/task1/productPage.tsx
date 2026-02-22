@@ -17,14 +17,17 @@ import ProductCord from "@/templates/productCord";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import ProductCardSkeleton from "@/templates/productCardSkeleton";
 import { GetSearchProductsAPI } from "@/services/GetSearchProducts.api";
+import { useRouter, useSearchParams } from "next/navigation";
 
 type Product = {
   id: number;
 };
 
 const ProductPage = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
-  const [skip, setSkip] = useState<number>(1);
+  const [skip, setSkip] = useState<number>(+(searchParams.get("skip") ?? 1));
   const [total, setTotal] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
@@ -57,13 +60,20 @@ const ProductPage = () => {
     queryKey: ["searchProducts", skip],
     queryFn: () => GetSearchProductsAPI({ search, skip }),
   });
+  const onPageChange = (page: { page: number; pageSize: number }) => {
+    const params = new URLSearchParams(searchParams.toString());
+    page.page == 1
+      ? params.delete("skip")
+      : params.set("skip", String(page.page));
+    setSkip(page.page);
+    router.push(`?${params.toString()}`);
+  };
 
   let timer: ReturnType<typeof setTimeout>;
   const debouncedSearch = (value: string) => {
     setSearch(value.trim());
 
     clearTimeout(timer);
-    console.log("ddddd");
     timer = setTimeout(() => {
       refetchSearchProducts();
       setSkip(1);
@@ -139,9 +149,7 @@ const ProductPage = () => {
           page={skip}
           pageSize={16}
           siblingCount={maxVisiblePages}
-          onPageChange={(page) => {
-            setSkip(page.page);
-          }}
+          onPageChange={(page) => onPageChange(page)}
           mx="auto"
           my={4}
           width="fit"

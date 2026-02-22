@@ -3,11 +3,12 @@ import { BiUser } from "react-icons/bi";
 import { FcTodoList } from "react-icons/fc";
 import { LuLogOut } from "react-icons/lu";
 import { usePathname, useRouter } from "next/navigation";
-import { logout } from "src/functions/logout";
+import { useLogout } from "@/hooks/useLogout";
 
 const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
+  const logout = () => useLogout();
 
   const links = [
     { label: "اطلاعات حساب کاربری", icon: <BiUser />, path: "/task1/users" },

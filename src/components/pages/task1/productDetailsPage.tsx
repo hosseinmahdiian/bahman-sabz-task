@@ -10,9 +10,7 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { Divider } from "@chakra-ui/theme/components";
 import { useQuery } from "@tanstack/react-query";
-import { constants } from "buffer";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";

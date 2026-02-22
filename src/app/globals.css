@@ -31,3 +31,13 @@ body {
     @apply text-xl cursor-pointer text-[#78b5d8] transform duration-500 transition-all hover:scale-105;
   }
 }
+
+.custom-scrollbar {
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+  overflow: auto; 
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none; 
+}

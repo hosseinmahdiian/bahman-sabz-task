@@ -1,27 +1,57 @@
 "use client";
+import React, { useEffect } from "react";
 import { GetUserAPI } from "@/services/GetUser.api";
+import { RefreshTokenAPI } from "@/services/RefreshToken.api";
 import Sidebar from "@/templates/Sidebar";
 import { Box, Skeleton, Table, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname, useRouter } from "next/navigation";
-import React, { useEffect } from "react";
-import { BiUser } from "react-icons/bi";
-import { FcTodoList } from "react-icons/fc";
-import { LuLogOut } from "react-icons/lu";
-import { logout } from "src/functions/logout";
+import { useGetRefreshToken } from "@/hooks/useGetRefreshToken";
+import { useGetAccessToken } from "@/hooks/useGetAccessToken";
 
 const UsersPage = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { data, isPending } = useQuery({
-    queryKey: ["users"],
-    queryFn: () => GetUserAPI(),
+
+  const {
+    data: dataRefreshToken,
+    isPending: isPendingRefreshToken,
+    isSuccess: isSuccessRefreshToken,
+    refetch: refetchRefreshToken,
+  } = useQuery({
+    queryKey: ["refreshToken"],
+    queryFn: () => RefreshTokenAPI(),
+    enabled: false,
   });
 
+  const { data, isPending, refetch } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => GetUserAPI(),
+    enabled: false,
+  });
+
+  const checkTokens = async () => {
+    const accessToken = await useGetAccessToken();
+    const refreshToken = await useGetRefreshToken();
+
+    if (!accessToken) {
+      if (!refreshToken) {
+        router.push("/task1/login");
+        return;
+      }
+      await refetchRefreshToken();
+      return;
+    }
+    await refetch();
+  };
+
   useEffect(() => {
-    const hasUser = document.cookie.includes("user=");
-    if (!hasUser) router.push("/task1/login");
+    checkTokens();
   }, []);
+
+  useEffect(() => {
+    isSuccessRefreshToken && refetch();
+  }, [isSuccessRefreshToken]);
 
   return (
     <div className="lg:flex  gap-x-10 ">

@@ -1,6 +1,6 @@
 "use server";
 import { instanceDummyJson } from "./baseDummyJson.api";
-import { OrderFields, SortOrder } from "@/types";
+import { OrderFieldsType, SortOrderType } from "@/types";
 
 export const GetAllProductsAPI = async ({
   skip = 1,
@@ -18,10 +18,8 @@ export const GetAllProductsAPI = async ({
     const response = await instanceDummyJson.get(
       `/products?${params.toString()}`,
     );
-    const Products = response.data;
-    console.log(Products);
 
-    return Products;
+    return response?.data;
   } catch (error) {
     console.error("دریافت محصولات ناموفق", error);
     throw error;

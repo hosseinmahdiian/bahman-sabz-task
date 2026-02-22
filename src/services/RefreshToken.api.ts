@@ -1,34 +1,44 @@
 "use server";
 import { cookies } from "next/headers";
 import { instanceDummyJson } from "./baseDummyJson.api";
-import { decrypt, encrypt } from "src/cryptoJs";
+import { encrypt } from "src/cryptoJs";
+import { useGetRefreshToken } from "@/hooks/useGetRefreshToken";
+import { maxAgeAccessToken, maxAgeRefreshToken } from "@/constants";
+import { GetUserAPI } from "./GetUser.api";
 
 export const RefreshTokenAPI = async () => {
   try {
-    const cookie = await cookies();
-    const oldData = cookie.get("user");
+    const refreshToken = await useGetRefreshToken();
 
-    if (!oldData) throw new Error("کوکی یافت نشد");
-
-    const user = decrypt(oldData?.value);
+    if (!refreshToken) throw new Error("کوکی یافت نشد");
 
     const response = await instanceDummyJson.post("/auth/refresh", {
-      refreshToken: user?.refreshToken ?? "",
+      refreshToken: refreshToken ?? "",
       expiresInMins: 30,
     });
 
     const userData = response.data;
 
     if (userData) {
-      const encrypted = encrypt(userData);
+      const accessToken = encrypt(userData.accessToken);
+      const refreshToken = encrypt(userData.refreshToken);
 
       const cookieStore = await cookies();
-      cookieStore.set("user", encrypted, {
-        maxAge: 30 * 60,
+
+      cookieStore.set("accessToken", accessToken, {
+        maxAge: maxAgeAccessToken,
         httpOnly: true,
-        secure: true,
+        // secure: true,
         path: "/",
       });
+
+      cookieStore.set("refreshToken", refreshToken, {
+        maxAge: maxAgeRefreshToken,
+        httpOnly: true,
+        // secure: true,
+        path: "/",
+      });
+      await GetUserAPI();
 
       return userData;
     }

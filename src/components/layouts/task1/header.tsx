@@ -6,23 +6,49 @@ import logo from "@/images/Logo-bahmansabz.png";
 import { Box, Container, Text } from "@chakra-ui/react";
 import { LuLogOut } from "react-icons/lu";
 import ThemeToggle from "@/templates/themeToggleChakar";
-import { logout } from "src/functions/logout";
 import { usePathname, useRouter } from "next/navigation";
 import { BiLogIn, BiUser } from "react-icons/bi";
-import { userInfo } from "src/functions/userInfo";
+import { RefreshTokenAPI } from "@/services/RefreshToken.api";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
+import { useGetAccessToken } from "@/hooks/useGetAccessToken";
+import { useGetRefreshToken } from "@/hooks/useGetRefreshToken";
 
 const Header = () => {
   const router = useRouter();
   const [hasUser, setHasUser] = useState(false);
   const pathname = usePathname();
 
-  useEffect(() => {
-    const cookie = document.cookie;
-    console.log(cookie.includes("user="));
-    console.log(pathname);
+  const {
+    data: dataRefreshToken,
+    isPending: isPendingRefreshToken,
+    isSuccess: isSuccessRefreshToken,
+    refetch: refetchRefreshToken,
+  } = useQuery({
+    queryKey: ["refreshToken"],
+    queryFn: () => RefreshTokenAPI(),
+    enabled: false,
+  });
 
-    setHasUser(cookie.includes("user="));
-  }, [pathname]);
+  const checkTokens = async () => {
+    const accessToken = await useGetAccessToken();
+    const refreshToken = await useGetRefreshToken();
+
+    if (!accessToken) {
+      if (!refreshToken) {
+        router.push("/task1/login");
+        return;
+      }
+      await refetchRefreshToken();
+      return;
+    } else {
+      setHasUser(!!accessToken);
+    }
+  };
+
+  useEffect(() => {
+    checkTokens();
+  }, [pathname, dataRefreshToken]);
 
   return (
     <Box
@@ -45,10 +71,12 @@ const Header = () => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Box display="flex" alignItems="center" gap="5">
-          <Image alt="logo" src={logo} width={60} height={60} />
-          <Text>موسسه بهمن سبز</Text>
-        </Box>
+        <Link href={"/"}>
+          <Box display="flex" alignItems="center" gap="5">
+            <Image alt="logo" src={logo} width={60} height={60} />
+            <Text>موسسه بهمن سبز</Text>
+          </Box>
+        </Link>
 
         <Box display="flex" alignItems="center" gap="2">
           {!hasUser ? (

@@ -1,17 +1,14 @@
-
 import { childrenType } from "@/types";
 import { Metadata } from "next";
-import LayoutTask1 from "src/components/layouts/task1/layoutTask1";
+import LayoutTask2 from "src/components/layouts/task2/layout";
 
 export const metadata: Metadata = {
-  title: "تسک ۱",
-  description: "تسک ۱",
+  title: "تسک ۲",
+  description: "تسک ۲",
 };
 
 const layout = ({ children }: childrenType) => {
-  return (
-      <LayoutTask1>{children}</LayoutTask1>
-  );
+  return <LayoutTask2>{children}</LayoutTask2>;
 };
 
 export default layout;

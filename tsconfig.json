@@ -28,6 +28,7 @@
       "@/templates/*": ["./src/components/templates/*"],
       "@/pages/*": ["./src/components/pages/*"],
       "@/layout/*": ["./src/components/layout/*"],
+      "@/hooks/*": ["./src/hooks/*"],
       "@/services/*": ["./src/services/*"],
       "@/images/*": ["./public/images/*"],
       "@/svg/*": ["./public/svg/*"]

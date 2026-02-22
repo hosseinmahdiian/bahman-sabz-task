@@ -14,7 +14,7 @@ import LayoutMain from "../layouts/layout";
 
 const tasks = [
   { href: "/task1", label: "task1" },
-  { href: "/task2", label: "task2" },
+  { href: "/games", label: "task2" },
   { href: "/task3", label: "task3" },
 ];
 

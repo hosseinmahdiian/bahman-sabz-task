@@ -13,10 +13,11 @@ import { useEffect, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 import logo from "@/images/Logo-bahmansabz.png";
 import Image from "next/image";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { LoginUserAPI } from "@/services/LoginUser.api";
 import { useRouter } from "next/navigation";
 import { handleChange } from "@/functions";
+import { useGetAccessToken } from "@/hooks/useGetAccessToken";
 
 type LoginType = {
   username: string;
@@ -36,14 +37,20 @@ const LoginPage = () => {
     mutationFn: () => LoginUserAPI(role),
   });
 
+  const checkTokens = async () => {
+    const accessToken = await useGetAccessToken();
+    if (accessToken) {
+      router.push("/task1");
+    }
+  };
+
+  useEffect(() => {
+    checkTokens();
+  }, []);
+
   useEffect(() => {
     isSuccess && router.push("/task1");
   }, [isSuccess]);
-
-  useEffect(() => {
-    const hasUser = document.cookie.includes("user=");
-    if (hasUser) router.push("/task1");
-  }, []);
 
   return (
     <Box minH="full" w="full">

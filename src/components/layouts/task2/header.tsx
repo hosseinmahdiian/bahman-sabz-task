@@ -1,7 +1,8 @@
 import Image from "next/image";
 import logo from "@/images/Logo-bahmansabz.png";
-import ThemeToggle from "@/templates/themeToggle";
 import Link from "next/link";
+import { useContext } from "react";
+import { ColorModeContext } from "src/providers/MUIThemeProvider";
 
 const Header = () => {
   return (
@@ -11,9 +12,7 @@ const Header = () => {
           <Image alt="logo" src={logo} width={60} height={60} />
           <p>موسسه بهمن سبز</p>
         </Link>
-        <div className=" ">
-          <ThemeToggle />
-        </div>
+        <div className=" "></div>
       </div>
     </header>
   );

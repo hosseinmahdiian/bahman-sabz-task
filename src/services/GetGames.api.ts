@@ -5,17 +5,18 @@ import { instanceRawg } from "./baseRawg.api";
 
 export const GetGamesAPI = async ({
   page = 1,
-  page_size = 30,
   search,
-  ordering
+  ordering,
+  page_size = 28,
 }: {
   page?: number;
-  page_size?: 30 | 50 | 100;
+  page_size?: 28;
   search?: string;
   ordering?: OrderingType;
 }) => {
   const params = new URLSearchParams();
   const API_KEY = process.env.API_KEY;
+console.log(">>>>>>>>>");
 
   params.set("page", page.toString());
   params.set("page_size", page_size.toString());

@@ -1,36 +1,24 @@
-import ThemeToggle from "@/templates/themeToggleChakar";
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  Button,
-  HStack,
-  Stack,
-  Switch,
-  Text,
-} from "@chakra-ui/react";
 import Link from "next/link";
 import LayoutMain from "../layouts/layout";
-
-const tasks = [
-  { href: "/task1", label: "task1" },
-  { href: "/games", label: "task2" },
-  { href: "/task3", label: "task3" },
-];
+import { mainList } from "@/constants";
 
 const MainPage = () => {
   return (
     <LayoutMain>
-      <p className="text-center text-xl mt-4 text-theme ">
+      <p className="text-center text-2xl font-semibold mt-15 text-theme ">
         تسک تستی برای موسسه فرهنگی بهمن سبز
       </p>
 
-      <div className=" flex items-center justify-center mx-auto gap-2 border p4 rounded-xl">
-        {tasks.map((task) => (
+      <div className="flex flex-wrap items-center justify-center gap-4 mt-8 p-6 
+                      bg-white/70 backdrop-blur-md border border-gray-200 
+                      rounded-2xl shadow-md max-w-xl mx-auto">
+        {mainList.map((task) => (
           <Link
             key={task.href}
             href={task.href}
-            className="border border-theme px-4 py-2 rounded-xl bg-gray-400  text-theme "
+            className="px-5 py-2.5 rounded-xl border border-theme text-theme 
+                       bg-gray-100 hover:bg-theme  transition-all 
+                       duration-300 shadow-sm"
           >
             {task.label}
           </Link>

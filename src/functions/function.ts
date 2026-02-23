@@ -17,6 +17,8 @@ export const convertPersianToEnglish = (str: string) => {
 };
 
 
+
+
 export const handleChange = <T extends object>(
   e: React.ChangeEvent<HTMLInputElement>,
   set: Dispatch<SetStateAction<T>>,
@@ -24,3 +26,5 @@ export const handleChange = <T extends object>(
   const { name, value } = e.target;
   set((prev) => ({ ...prev, [name]: value.trim() }));
 };
+
+

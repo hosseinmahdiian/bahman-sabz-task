@@ -1,59 +1,157 @@
 "use client";
-import { GetGamesAPI } from "@/services/GetGames.api";
-import Filter from "@/templates/filter";
-import Input from "@/templates/input";
-import { OrderingType } from "@/types";
-import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
 
-const GamesPage = () => {
-  const [games, setGames] = useState<object[]>([]);
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { useQuery } from "@tanstack/react-query";
+import React, { lazy, useEffect, useRef, useState } from "react";
+import Grid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
+import BarLoader from "react-spinners/BarLoader";
+import { GetGamesAPI } from "@/services/GetGames.api";
+import { GameCardProps } from "@/templates/gameCord";
+import { OrderingType } from "@/types";
+
+const GameCard = lazy(() => import("@/templates/gameCord"));
+
+export default function GamesPage() {
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  const [games, setGames] = useState<GameCardProps[]>([]);
+  const [searchG, setSearchGames] = useState<GameCardProps[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<30 | 50 | 100>(30);
+  const [isLoading, setLoading] = useState<boolean>(false);
   const [totalGames, setTotalGames] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const [search, setSearch] = useState<string>("");
+  const [columnCount, setColumnCount] = useState<number>(4);
   const [ordering, setOrdering] = useState<OrderingType>("");
-  const [filter1, setFilter1] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+
+  const rowCount = Math.ceil(games.length / columnCount);
+  const rowVirtualizer = useVirtualizer({
+    count: rowCount,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 400,
+    overscan: 5,
+  });
 
   const {
-    data: dataSearchGames,
-    isPending: isPendingSearchGames,
-    isSuccess: isSuccessSearchGames,
-    refetch: refetchSearchGames,
+    data: dataSearch,
+    isFetching: isFetchingSearch,
+    isPending: isPendingSearch,
   } = useQuery({
-    queryKey: ["games", page, pageSize, ordering],
-    queryFn: () => GetGamesAPI({ page, page_size: pageSize, search, ordering }),
-    enabled: false,
+    queryKey: ["searchGames", page, ordering],
+    queryFn: () => GetGamesAPI({ page, ordering }),
+    // enabled: false,
+  });
+
+  const { data, isFetching, isPending } = useQuery({
+    queryKey: ["games", page, ordering],
+    queryFn: () => GetGamesAPI({ page, ordering }),
+    // enabled: false,
   });
 
   useEffect(() => {
-    setTotalGames(dataSearchGames?.count);
-    setTotalPages(Math.ceil((dataSearchGames?.count ?? 0) / pageSize));
-    if (dataSearchGames?.results) {
-      setGames(dataSearchGames.results);
+    if (data?.results) {
+      setGames((prev) => [...prev, ...data.results]);
+      setTotalGames(data.count);
+      setLoading(false);
     }
-  }, [dataSearchGames]);
+  }, [data]);
 
-  const items = [
-    { name: "1", id: 1 },
-    { name: "2", id: 2 },
-    { name: "3", id: 3 },
-  ];
+  useEffect(() => {
+    const handleResize = () => {
+      if (!parentRef.current) return;
+
+      const width = parentRef.current.clientWidth;
+      let cols;
+      if (width <= 768) {
+        cols = 2;
+      } else if (width <= 1024) {
+        cols = 2;
+      } else if (width <= 1280) {
+        cols = 3;
+      } else if (width > 1280) {
+        cols = 4;
+      } else {
+        cols = 1;
+      }
+      setColumnCount(cols);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const lastItem = rowVirtualizer.getVirtualItems().at(-1);
+    if (!lastItem) return;
+
+    if (
+      lastItem.index >= rowCount - 2 &&
+      !isFetching &&
+      games.length < totalGames
+    ) {
+      setPage((p) => p + 1);
+      setLoading(true);
+    }
+  }, [rowVirtualizer.getVirtualItems(), isFetching]);
+
   return (
-    <div className="border h-full px-4 2xl:px-5">
-      <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        <Input
-          placeholder="جستوجو"
-          style=" md:col-span-2 lg:col-span-1 "
-          data={search}
-          FN={(e) => setSearch(e.target.value)}
-        />
+    <div
+      className=" mx-auto  min-h-full"
+      ref={parentRef}
+      style={{
+        height: rowVirtualizer.getTotalSize(),
+        minHeight: "full",
+        position: "relative",
+      }}
+    >
+      <div
+        className=" w-[333px] md:w-[630px] lg:w-[960px] xl:w-[1290px] mx-auto"
+        style={{
+          position: "relative",
+          paddingBottom: "100px",
+        }}
+      >
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const startIndex = virtualRow.index * columnCount;
+          const rowItems = games.slice(startIndex, startIndex + columnCount);
 
-        <Filter title="نمایش" items={items} FN={setFilter1} open={filter1} />
+          return (
+            <div
+              key={virtualRow.key}
+              className="absolute left-0 w-full px-4 "
+              style={{
+                top: virtualRow.start,
+                height: virtualRow.size,
+              }}
+            >
+              <div
+                className="grid gap-4 "
+                style={{
+                  gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+                }}
+              >
+                {rowItems.map((game) => (
+                  <div key={game.id} className="h-[330px]">
+                    <GameCard {...game} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </div>
+      {isFetching && (
+        <div className="w-full flex justify-center py-6 absolute -bottom-2 ">
+          <BarLoader color="#5becf6" />
+        </div>
+      )}
+      {isPending && !isLoading && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/70 backdrop-blur-sm">
+          <CircularProgress />
+        </div>
+      )}
     </div>
   );
-};
-
-export default GamesPage;
+}

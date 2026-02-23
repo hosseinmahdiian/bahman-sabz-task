@@ -36,13 +36,14 @@ const Header = () => {
 
     if (!accessToken) {
       if (!refreshToken) {
-        router.push("/task1/login");
+        // router.push("/task1/login");
         return;
       }
       await refetchRefreshToken();
       return;
     } else {
       setHasUser(!!accessToken);
+      // router.push("/task1");
     }
   };
 

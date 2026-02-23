@@ -18,7 +18,6 @@ export const GetUserAPI = async () => {
 
     if (response.data) {
       const user = encrypt(response.data);
-      console.log(response.data);
 
       const cookieStore = await cookies();
       cookieStore.set("user", user, {

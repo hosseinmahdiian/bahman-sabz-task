@@ -1,15 +1,22 @@
 import React from "react";
-import Footer from "./footer";
-import Header from "./header";
+
 import { childrenType } from "@/types";
+import { ThemeProvider } from "next-themes";
+import Header from "../header";
+import Footer from "../footer";
 
 const LayoutTask2 = ({ children }: childrenType) => {
   return (
-      <div className="2xl:container mx-auto w-full h-full">
+    <ThemeProvider attribute="data-theme">
+      <div className=" w-full h-full">
         <Header />
-        <div className="min-h-[calc(100%-80px)] max-h-full h-full pt-20"> {children}</div>
+        <div className="min-h-[calc(100%-80px)] max-h-full h-full 2xl:container mx-auto pt-20">
+          {" "}
+          {children}
+        </div>
         {/* <Footer /> */}
       </div>
+    </ThemeProvider>
   );
 };
 

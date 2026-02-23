@@ -32,85 +32,58 @@ const GameCard = ({
   id,
 }: GameCardProps) => {
   return (
-    <Link href={`http://localhost:3000/games${id}`}>
-      <Card
-        dir="ltr"
-        sx={{
-          width: 300,
-          borderRadius: 3,
-          overflow: "hidden",
-          bgcolor: "gray",
-          color: "white",
-          position: "relative",
-          textAlign: "left",
-        }}
-      >
-        <Box sx={{ position: "relative", width: "100%", height: 170 }}>
+    <Link href={`/games/${id}`} className="block w-[300px]">
+      <div className="rounded-2xl overflow-hidden bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-white relative text-left shadow-lg hover:scale-[1.02] transition-transform duration-300">
+        <div className="relative w-full h-[170px]">
           <Image
             src={background_image}
             alt={name}
             fill
             sizes="(max-width: 640px) 100vw,
-         (max-width: 1024px) 50vw,
-         (max-width: 1280px) 33vw,
-         25vw"
-            style={{
-              objectFit: "cover",
-            }}
+        (max-width: 1024px) 50vw,
+        (max-width: 1280px) 33vw,
+        25vw"
+            className="object-cover"
           />
-        </Box>
+        </div>
 
-        <CardContent>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              display: "-webkit-box",
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            }}
-          >
-            {name}
-          </Typography>
+        <div className="p-4">
+          <h3 className="font-bold text-lg line-clamp-1">{name}</h3>
 
-          <Box
-            sx={{
-              display: "flex",
-              flexWrap: "nowrap",
-              overflow: "hidden",
-              gap: 0.5,
-              mt: 1,
-              height: 24,
-            }}
-          >
+          <div className="flex flex-nowrap overflow-hidden gap-1 mt-2 h-6">
             {genres?.slice(0, 3).map((g) => (
-              <Chip
+              <span
                 key={g.name}
-                label={g.name}
-                size="small"
-                sx={{ bgcolor: "#333", color: "white" }}
-              />
+                className="text-xs px-2 py-0.5 rounded-full bg-gray-500 text-gray-200 whitespace-nowrap flex items-center"
+              >
+                {g.name}
+              </span>
             ))}
-          </Box>
+          </div>
 
-          <Box sx={{ mt: 1, display: "flex", alignItems: "center", gap: 1 }}>
-            <Rating value={rating} precision={0.1} readOnly />
-            <Typography variant="body2">{rating.toFixed(1)}</Typography>
-          </Box>
+          <div className="mt-3 flex items-center gap-2">
+            <div className="flex text-yellow-400 text-sm">
+              {"★".repeat(Math.round(rating))}
+            </div>
+            <span className="text-sm">{rating.toFixed(1)}</span>
+          </div>
 
-          <Typography sx={{ mt: 1 }}>
+          <p className="mt-2 text-sm">
             Metacritic:{" "}
-            <span style={{ color: metacritic > 75 ? "#4caf50" : "#ff9800" }}>
+            <span
+              className={
+                metacritic > 75
+                  ? "text-green-500 font-semibold"
+                  : "text-orange-400 font-semibold"
+              }
+            >
               {metacritic}
             </span>
-          </Typography>
+          </p>
 
-          <Typography variant="body2" sx={{ opacity: 0.7, mt: 0.5 }}>
-            Released: {released}
-          </Typography>
-        </CardContent>
-      </Card>
+          <p className="text-sm opacity-70 mt-1">Released: {released}</p>
+        </div>
+      </div>
     </Link>
   );
 };

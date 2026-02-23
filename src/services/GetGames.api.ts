@@ -16,7 +16,6 @@ export const GetGamesAPI = async ({
 }) => {
   const params = new URLSearchParams();
   const API_KEY = process.env.API_KEY;
-console.log(">>>>>>>>>");
 
   params.set("page", page.toString());
   params.set("page_size", page_size.toString());
@@ -29,7 +28,6 @@ console.log(">>>>>>>>>");
       `/games?${params.toString()}&key=${API_KEY}`,
     );
     const Products = response.data;
-    console.log(Products);
 
     return Products;
   } catch (error) {

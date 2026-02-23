@@ -9,10 +9,17 @@ export type SortOrderType = "asc" | "desc";
 
 export type OrderingType =
   | "name"
+  | "-name"
   | "released"
   | "added"
   | "created"
   | "updated"
   | "rating"
+  | "-rating"
   | "metacritic"
   | "";
+
+export type PropsPagesType = {
+  searchParams?: { ordering?: string };
+  params?: { id: string };
+};

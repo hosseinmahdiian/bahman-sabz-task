@@ -60,6 +60,7 @@ const ProductPage = () => {
     queryKey: ["searchProducts", skip],
     queryFn: () => GetSearchProductsAPI({ search, skip }),
   });
+  
   const onPageChange = (page: { page: number; pageSize: number }) => {
     const params = new URLSearchParams(searchParams.toString());
     page.page == 1

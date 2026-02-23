@@ -3,7 +3,6 @@ import { AiOutlineDislike, AiOutlineEye, AiOutlineLike } from "react-icons/ai";
 
 const PostsCard = (item: any) => {
   const { title, body, reactions, tags, views } = item?.item;
-  console.log(reactions);
 
   return (
     <Box

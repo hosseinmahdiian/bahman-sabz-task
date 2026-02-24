@@ -11,7 +11,6 @@ const LayoutTask2 = ({ children }: childrenType) => {
       <div className=" w-full h-full">
         <Header />
         <div className="min-h-[calc(100%-80px)] max-h-full h-full 2xl:container mx-auto pt-20">
-          {" "}
           {children}
         </div>
         {/* <Footer /> */}

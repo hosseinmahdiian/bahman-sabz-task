@@ -43,6 +43,7 @@ const ProductPage = () => {
     data: dataProducts,
     isPending: isPendingProducts,
     isSuccess: isSuccessProducts,
+    isError: isErrorProducts,
   } = useQuery({
     queryKey: ["products", skip],
     queryFn: () =>
@@ -55,12 +56,17 @@ const ProductPage = () => {
     data: dataSearchProducts,
     isPending: isPendingSearchProducts,
     isSuccess: isSuccessSearchProducts,
+    isError: isErrorSearchProducts,
     refetch: refetchSearchProducts,
   } = useQuery({
     queryKey: ["searchProducts", skip],
     queryFn: () => GetSearchProductsAPI({ search, skip }),
   });
-  
+
+  useEffect(() => {
+    if (isErrorSearchProducts || isErrorProducts) throw new Error("متن خطا");
+  }, [isErrorSearchProducts]);
+
   const onPageChange = (page: { page: number; pageSize: number }) => {
     const params = new URLSearchParams(searchParams.toString());
     page.page == 1

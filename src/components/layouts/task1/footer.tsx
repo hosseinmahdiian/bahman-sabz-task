@@ -14,7 +14,6 @@ function Footer() {
       alignItems={"center"}
       justifyContent="space-between"
     >
-      {" "}
       <Text> پروژه تست</Text>
       <Image alt="logo" src={logo} width={60} height={60} />
     </Container>

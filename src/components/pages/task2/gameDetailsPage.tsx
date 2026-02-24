@@ -2,13 +2,16 @@ import { GetSingleGameAPI } from "@/services/GetSingleGame.api";
 import { Skeleton } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { BiArrowBack } from "react-icons/bi";
 
 const GameDetailsPage = async (id: { id: string }) => {
   let game = null;
   try {
     game = await GetSingleGameAPI(id?.id);
-  } catch (error) {}
+  } catch (error) {
+    notFound();
+  }
 
   if (game == null) {
     return (

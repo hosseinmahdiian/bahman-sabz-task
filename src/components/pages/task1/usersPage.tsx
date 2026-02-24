@@ -17,6 +17,7 @@ const UsersPage = () => {
     data: dataRefreshToken,
     isPending: isPendingRefreshToken,
     isSuccess: isSuccessRefreshToken,
+    isError: isErrorRefreshToken,
     refetch: refetchRefreshToken,
   } = useQuery({
     queryKey: ["refreshToken"],
@@ -24,11 +25,15 @@ const UsersPage = () => {
     enabled: false,
   });
 
-  const { data, isPending, refetch } = useQuery({
+  const { data, isPending, refetch, isError } = useQuery({
     queryKey: ["users"],
     queryFn: () => GetUserAPI(),
     enabled: false,
   });
+
+  useEffect(() => {
+    if (isError) throw new Error("متن خطا");
+  }, [isError]);
 
   const checkTokens = async () => {
     const accessToken = await useGetAccessToken();

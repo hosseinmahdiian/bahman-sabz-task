@@ -23,6 +23,7 @@ const Header = () => {
     data: dataRefreshToken,
     isPending: isPendingRefreshToken,
     isSuccess: isSuccessRefreshToken,
+    isError: isErrorRefreshToken,
     refetch: refetchRefreshToken,
   } = useQuery({
     queryKey: ["refreshToken"],
@@ -48,7 +49,10 @@ const Header = () => {
   };
 
   useEffect(() => {
-    checkTokens();
+    setTimeout(() => {
+      checkTokens();
+    }, 100);
+    console.log(pathname);
   }, [pathname, dataRefreshToken]);
 
   return (

@@ -65,6 +65,11 @@ const ProductDetailsPage = () => {
     queryFn: () => GetSingleProductAPI(String(params?.id ?? "")),
     enabled: !!params.id,
   });
+
+  useEffect(() => {
+    if (isError) throw new Error("متن خطا");
+  }, [isError]);
+
   useEffect(() => {
     setProducts(data);
   }, [data]);
@@ -121,7 +126,7 @@ const ProductDetailsPage = () => {
             fontSize="sm"
             color={{ base: "gray.600", _dark: "gray.400" }}
           >
-            برند:{" "}
+            برند:
             {isPending ? <Skeleton height="16px" w="100px" /> : product?.brand}
           </Text>
           <Text
@@ -129,7 +134,7 @@ const ProductDetailsPage = () => {
             fontSize="sm"
             color={{ base: "gray.600", _dark: "gray.400" }}
           >
-            SKU:{" "}
+            SKU:
             {isPending ? <Skeleton height="16px" w="80px" /> : product?.sku}
           </Text>
           <Text
@@ -137,8 +142,8 @@ const ProductDetailsPage = () => {
             fontSize="sm"
             color={{ base: "gray.600", _dark: "gray.400" }}
           >
-            موجودی:{" "}
-            {isPending ? <Skeleton height="16px" w="60px" /> : product?.stock}{" "}
+            موجودی:
+            {isPending ? <Skeleton height="16px" w="60px" /> : product?.stock}
             عدد
           </Text>
           <Text
@@ -146,7 +151,7 @@ const ProductDetailsPage = () => {
             fontSize="sm"
             color={{ base: "gray.600", _dark: "gray.400" }}
           >
-            دسته‌بندی:{" "}
+            دسته‌بندی:
             {isPending ? (
               <Skeleton height="16px" w="80px" />
             ) : (
@@ -231,12 +236,12 @@ const ProductDetailsPage = () => {
         </Text>
         <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
           <Text as="span">
-            وزن:{" "}
-            {isPending ? <Skeleton height="16px" w="60px" /> : product?.weight}{" "}
+            وزن:
+            {isPending ? <Skeleton height="16px" w="60px" /> : product?.weight}
             گرم
           </Text>
           <Text as="span">
-            ابعاد:{" "}
+            ابعاد:
             {isPending ? (
               <Skeleton height="16px" w="100px" />
             ) : (
@@ -244,7 +249,7 @@ const ProductDetailsPage = () => {
             )}
           </Text>
           <Text as="span">
-            گارانتی:{" "}
+            گارانتی:
             {isPending ? (
               <Skeleton height="16px" w="120px" />
             ) : (
@@ -252,7 +257,7 @@ const ProductDetailsPage = () => {
             )}
           </Text>
           <Text as="span">
-            ارسال:{" "}
+            ارسال:
             {isPending ? (
               <Skeleton height="16px" w="120px" />
             ) : (
@@ -260,7 +265,7 @@ const ProductDetailsPage = () => {
             )}
           </Text>
           <Text as="span">
-            وضعیت:{" "}
+            وضعیت:
             {isPending ? (
               <Skeleton height="16px" w="80px" />
             ) : (
@@ -268,7 +273,7 @@ const ProductDetailsPage = () => {
             )}
           </Text>
           <Text as="span">
-            حداقل سفارش:{" "}
+            حداقل سفارش:
             {isPending ? (
               <Skeleton height="16px" w="80px" />
             ) : (
@@ -276,7 +281,7 @@ const ProductDetailsPage = () => {
             )}
           </Text>
           <Text as="span">
-            سیاست بازگشت:{" "}
+            سیاست بازگشت:
             {isPending ? (
               <Skeleton height="16px" w="100px" />
             ) : (
@@ -310,7 +315,7 @@ const ProductDetailsPage = () => {
                     fontSize="sm"
                     color={{ base: "gray.600", _dark: "gray.400" }}
                   >
-                    {new Date(review.date).toLocaleDateString()} | امتیاز:{" "}
+                    {new Date(review.date).toLocaleDateString()} | امتیاز:
                     {review.rating}
                   </Text>
                   <Text mt={2}>{review.comment}</Text>

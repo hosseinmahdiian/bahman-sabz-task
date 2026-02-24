@@ -8,6 +8,7 @@ import PostsCardSkeleton from "@/templates/postsCordSkeleton";
 import Sidebar from "@/templates/Sidebar";
 import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
+import { error } from "console";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -28,6 +29,7 @@ const PostsPage = () => {
     data: dataRefreshToken,
     isPending: isPendingRefreshToken,
     isSuccess: isSuccessRefreshToken,
+    isError: isErrorRefreshToken,
     refetch: refetchRefreshToken,
   } = useQuery({
     queryKey: ["refreshToken"],
@@ -35,11 +37,15 @@ const PostsPage = () => {
     enabled: false,
   });
 
-  const { data, isPending, isSuccess, refetch } = useQuery({
+  const { data, isPending, isSuccess, isError, refetch } = useQuery({
     queryKey: ["postsByUser"],
     queryFn: () => GetPostsByUserAPI(),
     enabled: false,
   });
+
+  useEffect(() => {
+    if (isError ) throw new Error("متن خطا");
+  }, [isError]);
 
   const checkTokens = async () => {
     const accessToken = await useGetAccessToken();

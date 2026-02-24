@@ -12,8 +12,9 @@ import { useRouter } from "next/navigation";
 import { FaFilter } from "react-icons/fa6";
 import { CiCalendarDate } from "react-icons/ci";
 import { BsFillHeartFill } from "react-icons/bs";
-import { FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
+import { FaArrowUp, FaSortAmountDown, FaSortAmountUp } from "react-icons/fa";
 import Input from "@/templates/input";
+import { BiArrowFromTop, BiArrowToTop } from "react-icons/bi";
 
 const GameCard = lazy(() => import("@/templates/gameCord"));
 
@@ -40,7 +41,9 @@ export const filterItem = [
     value: "-metacritic",
   },
 ];
+
 export default function GamesPage(searchParams: { ordering: string }) {
+  let scrollY = window.scrollY;
 
   const parentRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -87,10 +90,13 @@ export default function GamesPage(searchParams: { ordering: string }) {
     }, 500);
   };
 
-  const { data, isFetching, isPending, status, refetch } = useQuery({
+  const { data, isFetching, isPending, status, isError, refetch } = useQuery({
     queryKey: ["games", page, ordering, searchD],
     queryFn: () => GetGamesAPI({ page, ordering, search: searchD }),
   });
+  useEffect(() => {
+    if (isError) throw new Error("متن خطا");
+  }, [isError]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -147,7 +153,7 @@ export default function GamesPage(searchParams: { ordering: string }) {
   }, [rowVirtualizer.getVirtualItems(), isFetching]);
 
   return (
-    <Suspense fallback={<div>Loading games...</div>}>
+    <Suspense fallback={<div> </div>}>
       <div
         className=" mx-auto  min-h-100   "
         ref={parentRef}
@@ -157,6 +163,15 @@ export default function GamesPage(searchParams: { ordering: string }) {
           position: "relative",
         }}
       >
+        {scrollY > 600 && (
+          <div
+            className="fixed right-4 bottom-8 cursor-pointer text-2xl p-3 border-theme bg-theme text-theme rounded-full shadow-lg hover:bg-gray-300 transition z-50"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
+            <FaArrowUp  />
+          </div>
+        )}
+
         <div className="sticky top-20 pt-1 bg-theme z-40 ">
           <Input
             style=" md:!w-100 !w-[calc(100%-20px)] md:mx-0 !mt-2"
@@ -194,7 +209,6 @@ export default function GamesPage(searchParams: { ordering: string }) {
             ))}
           </div>
         </div>
-
         <div
           className=" w-[333px] md:w-[630px] lg:w-[960px] xl:w-[1290px] mx-auto"
           style={{
@@ -202,34 +216,43 @@ export default function GamesPage(searchParams: { ordering: string }) {
             paddingBottom: "100px",
           }}
         >
-          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            const startIndex = virtualRow.index * columnCount;
-            const rowItems = games.slice(startIndex, startIndex + columnCount);
+          {totalGames > 0 ? (
+            rowVirtualizer.getVirtualItems().map((virtualRow) => {
+              const startIndex = virtualRow.index * columnCount;
+              const rowItems = games.slice(
+                startIndex,
+                startIndex + columnCount,
+              );
 
-            return (
-              <div
-                key={virtualRow.key}
-                className="absolute left-0 w-full px-4 "
-                style={{
-                  top: virtualRow.start,
-                  height: virtualRow.size,
-                }}
-              >
+              return (
                 <div
-                  className="grid gap-4 "
+                  key={virtualRow.key}
+                  className="absolute left-0 w-full px-4 "
                   style={{
-                    gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+                    top: virtualRow.start,
+                    height: virtualRow.size,
                   }}
                 >
-                  {rowItems.map((game) => (
-                    <div key={game.id} className="h-[330px]">
-                      <GameCard {...game} />
-                    </div>
-                  ))}
+                  <div
+                    className="grid gap-4 "
+                    style={{
+                      gridTemplateColumns: `repeat(${columnCount}, 1fr)`,
+                    }}
+                  >
+                    {rowItems.map((game) => (
+                      <div key={game.id} className="h-[330px]">
+                        <GameCard {...game} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="mx-auto w-fit mt-4 text-theme text-size">
+              <p >بازی یافت نشد</p>
+            </div>
+          )}
         </div>
         {isFetching && (
           <div className="w-full flex justify-center py-6 absolute -bottom-4 ">

@@ -69,7 +69,7 @@ const GameCard = ({
           </div>
 
           <p className="mt-2 text-sm">
-            Metacritic:{" "}
+            Metacritic:
             <span
               className={
                 metacritic > 75

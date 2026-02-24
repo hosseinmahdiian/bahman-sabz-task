@@ -32,11 +32,15 @@ const TodosPage = () => {
     enabled: false,
   });
 
-  const { data, isPending, isSuccess, refetch } = useQuery({
+  const { data, isPending, isSuccess, isError, refetch } = useQuery({
     queryKey: ["todosByUser"],
     queryFn: () => GetTodosByUserAPI(),
     enabled: false,
   });
+
+  useEffect(() => {
+    if (isError) throw new Error("متن خطا");
+  }, [isError]);
 
   const checkTokens = async () => {
     const user = await useUserInfo();
